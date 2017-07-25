@@ -83,8 +83,12 @@ class SeparationsSearchHandler(RequestHandler):  # pylint: disable=W0223
                 self.write({'results': response.json()})
             elif response.status_code in (400, 404, 422, 500):
                 self.set_status(response.status_code)
-                # the upstream error response is a map already, so no need to wrap it
-                self.write(response.json())
+                try:
+                    # the upstream error response is a map already, so no need to wrap it
+                    self.write(response.json())
+                except ValueError:
+                    # sometimes when something bad happens, the upstream returns no response body
+                    pass
             else:
                 # no details
                 self.set_status(response.status_code)

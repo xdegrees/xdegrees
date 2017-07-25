@@ -55,10 +55,7 @@ source venv/bin/activate
 python -m xdegrees.app --search-url='http://localhost:3000/v1/separations' --port=1792
 ```
 
-To confirm that the server is working, check the /version endpoint:
-```sh
-curl http://localhost:1792/version
-```
+Now you're ready to use the application! Go to http://localhost:1792/ in your browser.
 
 To see all command line parameters, including default values:
 ```sh
@@ -76,7 +73,8 @@ First, start the other microservice. Note that we specify the network here:
 docker run -it -p 3000:3000 --env-file ./.env.production --network my_network --name challenge-api challenge-api:latest
 ```
 
-Then, update the SEARCH_URL in your local .env.development file to connect to the microservice by name:
+Then, update the SEARCH_URL in your local .env.development file to connect to the other microservice by name. For
+example, since we used "challenge-api" above, the file should contain the following:
 SEARCH_URL=http://challenge-api:3000/v1/separations
 
 Finally, use Docker to start the server on the same network as above:
@@ -85,13 +83,13 @@ docker build -t xdegrees .
 docker run -it -p 1792:1792 --env-file ./.env.development --network my_network --name xdegrees  xdegrees:latest
 ```
 
+Now you're ready to use the application! Go to http://localhost:1792/ in your browser.
+
+### Monitoring
 To confirm that the server working, check the /version endpoint:
 ```sh
 curl http://localhost:1792/version
 ```
-
-### Monitoring
-Basic monitoring is available via the /version endpoint.
 
 ### Logging
 Logging is to stdout and stderr.
